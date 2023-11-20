@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificación de Imágenes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #imagen-preview {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #fc5c65;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff3f49;
+        }
+
+        p {
+            margin-top: 20px;
+            color: #333;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="color: #3498db;">Clasificación de Imágenes</h1>
+
+    <form method="post" action="/" enctype="multipart/form-data">
+        <label for="imagen" style="color: #333;">Subir Imagen:</label>
+        <input type="file" name="imagen" id="imagen" accept="image/*" required onchange="mostrarVistaPrevia()">
+        <img id="imagen-preview" src="#" alt="Vista previa de la imagen" style="display:none;">
+        <button type="submit">Clasificar</button>
+    </form>
+
+    {% if resultado %}
+    <p style="color: #2ecc71;">PERRO: {{ '%.2f'|format(resultado * 100) }}%</p>
+    <p style="color: #e74c3c;">GATO: {{ '%.2f'|format((1 - resultado) * 100) }}%</p>
+    {% endif %}
+
+    <script>
+        function mostrarVistaPrevia() {
+            var input = document.getElementById('imagen');
+            var preview = document.getElementById('imagen-preview');
+            var file = input.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '#';
+                preview.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>
